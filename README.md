@@ -1,4 +1,3 @@
-
 YBI Foundation
 
 Chance of Admission for Higher Studies
