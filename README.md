@@ -1,494 +1,170 @@
-{
-  "nbformat": 4,
-  "nbformat_minor": 0,
-  "metadata": {
-    "colab": {
-      "provenance": []
-    },
-    "kernelspec": {
-      "name": "python3",
-      "display_name": "Python 3"
-    },
-    "language_info": {
-      "name": "python"
-    }
-  },
-  "cells": [
-    {
-      "cell_type": "markdown",
-      "source": [
-        "# **[YBI Foundation](https://www.ybifoundation.org/)**\n",
-        "\n",
-        "**[Join Telegram to Get Updates of all Future FREE Bootcamps and Courses](https://telegram.me/ybif_ybifoundation)**"
-      ],
-      "metadata": {
-        "id": "yg1CKGzd6yp_"
-      }
-    },
-    {
-      "cell_type": "markdown",
-      "source": [
-        "# **Chance of Admission for Higher Studies**\n",
-        "\n",
-        "Predict the chances of admission of a student to a Graduate program based on:\n",
-        "\n",
-        "1. GRE Scores (290 to 340) \n",
-        "2. TOEFL Scores (92 to 120) \n",
-        "3. University Rating (1 to 5) \n",
-        "4. Statement of Purpose (1 to 5) \n",
-        "5. Letter of Recommendation Strength (1 to 5) \n",
-        "6. Undergraduate CGPA (6.8 to 9.92) \n",
-        "7. Research Experience (0 or 1) \n",
-        "6. Chance of Admit (0.34 to 0.97)"
-      ],
-      "metadata": {
-        "id": "m_T9KbBB6yqA"
-      }
-    },
-    {
-      "cell_type": "markdown",
-      "source": [
-        "**[Watch Video Tutorial](https://www.youtube.com/c/YBIFoundation?sub_confirmation=1)**"
-      ],
-      "metadata": {
-        "id": "FLRanr2j6yqA"
-      }
-    },
-    {
-      "cell_type": "code",
-      "source": [
-        "# Step 1 : import library\n",
-        "import pandas as pd"
-      ],
-      "metadata": {
-        "id": "RTo-hokh6yqA"
-      },
-      "execution_count": 1,
-      "outputs": []
-    },
-    {
-      "cell_type": "code",
-      "source": [
-        "# Step 2 : import data\n",
-        "admission = pd.read_csv('https://github.com/ybifoundation/Dataset/raw/main/Admission%20Chance.csv')"
-      ],
-      "metadata": {
-        "id": "ueIYllMH6yqA"
-      },
-      "execution_count": 2,
-      "outputs": []
-    },
-    {
-      "cell_type": "code",
-      "source": [
-        "admission.head()"
-      ],
-      "metadata": {
-        "colab": {
-          "base_uri": "https://localhost:8080/",
-          "height": 206
-        },
-        "outputId": "48d453c9-d0c7-4b51-db72-e6f41625f2ab",
-        "id": "VdQ-4oOq6yqA"
-      },
-      "execution_count": 3,
-      "outputs": [
-        {
-          "output_type": "execute_result",
-          "data": {
-            "text/plain": [
-              "   Serial No  GRE Score  TOEFL Score  University Rating   SOP  LOR   CGPA  \\\n",
-              "0          1        337          118                  4   4.5   4.5  9.65   \n",
-              "1          2        324          107                  4   4.0   4.5  8.87   \n",
-              "2          3        316          104                  3   3.0   3.5  8.00   \n",
-              "3          4        322          110                  3   3.5   2.5  8.67   \n",
-              "4          5        314          103                  2   2.0   3.0  8.21   \n",
-              "\n",
-              "   Research  Chance of Admit   \n",
-              "0         1              0.92  \n",
-              "1         1              0.76  \n",
-              "2         1              0.72  \n",
-              "3         1              0.80  \n",
-              "4         0              0.65  "
-            ],
-            "text/html": [
-              "\n",
-              "  <div id=\"df-2ae26ebb-f304-418f-adce-46158f30180f\">\n",
-              "    <div class=\"colab-df-container\">\n",
-              "      <div>\n",
-              "<style scoped>\n",
-              "    .dataframe tbody tr th:only-of-type {\n",
-              "        vertical-align: middle;\n",
-              "    }\n",
-              "\n",
-              "    .dataframe tbody tr th {\n",
-              "        vertical-align: top;\n",
-              "    }\n",
-              "\n",
-              "    .dataframe thead th {\n",
-              "        text-align: right;\n",
-              "    }\n",
-              "</style>\n",
-              "<table border=\"1\" class=\"dataframe\">\n",
-              "  <thead>\n",
-              "    <tr style=\"text-align: right;\">\n",
-              "      <th></th>\n",
-              "      <th>Serial No</th>\n",
-              "      <th>GRE Score</th>\n",
-              "      <th>TOEFL Score</th>\n",
-              "      <th>University Rating</th>\n",
-              "      <th>SOP</th>\n",
-              "      <th>LOR</th>\n",
-              "      <th>CGPA</th>\n",
-              "      <th>Research</th>\n",
-              "      <th>Chance of Admit</th>\n",
-              "    </tr>\n",
-              "  </thead>\n",
-              "  <tbody>\n",
-              "    <tr>\n",
-              "      <th>0</th>\n",
-              "      <td>1</td>\n",
-              "      <td>337</td>\n",
-              "      <td>118</td>\n",
-              "      <td>4</td>\n",
-              "      <td>4.5</td>\n",
-              "      <td>4.5</td>\n",
-              "      <td>9.65</td>\n",
-              "      <td>1</td>\n",
-              "      <td>0.92</td>\n",
-              "    </tr>\n",
-              "    <tr>\n",
-              "      <th>1</th>\n",
-              "      <td>2</td>\n",
-              "      <td>324</td>\n",
-              "      <td>107</td>\n",
-              "      <td>4</td>\n",
-              "      <td>4.0</td>\n",
-              "      <td>4.5</td>\n",
-              "      <td>8.87</td>\n",
-              "      <td>1</td>\n",
-              "      <td>0.76</td>\n",
-              "    </tr>\n",
-              "    <tr>\n",
-              "      <th>2</th>\n",
-              "      <td>3</td>\n",
-              "      <td>316</td>\n",
-              "      <td>104</td>\n",
-              "      <td>3</td>\n",
-              "      <td>3.0</td>\n",
-              "      <td>3.5</td>\n",
-              "      <td>8.00</td>\n",
-              "      <td>1</td>\n",
-              "      <td>0.72</td>\n",
-              "    </tr>\n",
-              "    <tr>\n",
-              "      <th>3</th>\n",
-              "      <td>4</td>\n",
-              "      <td>322</td>\n",
-              "      <td>110</td>\n",
-              "      <td>3</td>\n",
-              "      <td>3.5</td>\n",
-              "      <td>2.5</td>\n",
-              "      <td>8.67</td>\n",
-              "      <td>1</td>\n",
-              "      <td>0.80</td>\n",
-              "    </tr>\n",
-              "    <tr>\n",
-              "      <th>4</th>\n",
-              "      <td>5</td>\n",
-              "      <td>314</td>\n",
-              "      <td>103</td>\n",
-              "      <td>2</td>\n",
-              "      <td>2.0</td>\n",
-              "      <td>3.0</td>\n",
-              "      <td>8.21</td>\n",
-              "      <td>0</td>\n",
-              "      <td>0.65</td>\n",
-              "    </tr>\n",
-              "  </tbody>\n",
-              "</table>\n",
-              "</div>\n",
-              "      <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-2ae26ebb-f304-418f-adce-46158f30180f')\"\n",
-              "              title=\"Convert this dataframe to an interactive table.\"\n",
-              "              style=\"display:none;\">\n",
-              "        \n",
-              "  <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\"viewBox=\"0 0 24 24\"\n",
-              "       width=\"24px\">\n",
-              "    <path d=\"M0 0h24v24H0V0z\" fill=\"none\"/>\n",
-              "    <path d=\"M18.56 5.44l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94zm-11 1L8.5 8.5l.94-2.06 2.06-.94-2.06-.94L8.5 2.5l-.94 2.06-2.06.94zm10 10l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94z\"/><path d=\"M17.41 7.96l-1.37-1.37c-.4-.4-.92-.59-1.43-.59-.52 0-1.04.2-1.43.59L10.3 9.45l-7.72 7.72c-.78.78-.78 2.05 0 2.83L4 21.41c.39.39.9.59 1.41.59.51 0 1.02-.2 1.41-.59l7.78-7.78 2.81-2.81c.8-.78.8-2.07 0-2.86zM5.41 20L4 18.59l7.72-7.72 1.47 1.35L5.41 20z\"/>\n",
-              "  </svg>\n",
-              "      </button>\n",
-              "      \n",
-              "  <style>\n",
-              "    .colab-df-container {\n",
-              "      display:flex;\n",
-              "      flex-wrap:wrap;\n",
-              "      gap: 12px;\n",
-              "    }\n",
-              "\n",
-              "    .colab-df-convert {\n",
-              "      background-color: #E8F0FE;\n",
-              "      border: none;\n",
-              "      border-radius: 50%;\n",
-              "      cursor: pointer;\n",
-              "      display: none;\n",
-              "      fill: #1967D2;\n",
-              "      height: 32px;\n",
-              "      padding: 0 0 0 0;\n",
-              "      width: 32px;\n",
-              "    }\n",
-              "\n",
-              "    .colab-df-convert:hover {\n",
-              "      background-color: #E2EBFA;\n",
-              "      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
-              "      fill: #174EA6;\n",
-              "    }\n",
-              "\n",
-              "    [theme=dark] .colab-df-convert {\n",
-              "      background-color: #3B4455;\n",
-              "      fill: #D2E3FC;\n",
-              "    }\n",
-              "\n",
-              "    [theme=dark] .colab-df-convert:hover {\n",
-              "      background-color: #434B5C;\n",
-              "      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);\n",
-              "      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));\n",
-              "      fill: #FFFFFF;\n",
-              "    }\n",
-              "  </style>\n",
-              "\n",
-              "      <script>\n",
-              "        const buttonEl =\n",
-              "          document.querySelector('#df-2ae26ebb-f304-418f-adce-46158f30180f button.colab-df-convert');\n",
-              "        buttonEl.style.display =\n",
-              "          google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
-              "\n",
-              "        async function convertToInteractive(key) {\n",
-              "          const element = document.querySelector('#df-2ae26ebb-f304-418f-adce-46158f30180f');\n",
-              "          const dataTable =\n",
-              "            await google.colab.kernel.invokeFunction('convertToInteractive',\n",
-              "                                                     [key], {});\n",
-              "          if (!dataTable) return;\n",
-              "\n",
-              "          const docLinkHtml = 'Like what you see? Visit the ' +\n",
-              "            '<a target=\"_blank\" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'\n",
-              "            + ' to learn more about interactive tables.';\n",
-              "          element.innerHTML = '';\n",
-              "          dataTable['output_type'] = 'display_data';\n",
-              "          await google.colab.output.renderOutput(dataTable, element);\n",
-              "          const docLink = document.createElement('div');\n",
-              "          docLink.innerHTML = docLinkHtml;\n",
-              "          element.appendChild(docLink);\n",
-              "        }\n",
-              "      </script>\n",
-              "    </div>\n",
-              "  </div>\n",
-              "  "
-            ]
-          },
-          "metadata": {},
-          "execution_count": 3
-        }
-      ]
-    },
-    {
-      "cell_type": "code",
-      "source": [
-        "admission.info()"
-      ],
-      "metadata": {
-        "colab": {
-          "base_uri": "https://localhost:8080/"
-        },
-        "outputId": "330e7111-a890-467d-cba8-f45e79059a2b",
-        "id": "8R_JKfBI6yqA"
-      },
-      "execution_count": 4,
-      "outputs": [
-        {
-          "output_type": "stream",
-          "name": "stdout",
-          "text": [
-            "<class 'pandas.core.frame.DataFrame'>\n",
-            "RangeIndex: 400 entries, 0 to 399\n",
-            "Data columns (total 9 columns):\n",
-            " #   Column             Non-Null Count  Dtype  \n",
-            "---  ------             --------------  -----  \n",
-            " 0   Serial No          400 non-null    int64  \n",
-            " 1   GRE Score          400 non-null    int64  \n",
-            " 2   TOEFL Score        400 non-null    int64  \n",
-            " 3   University Rating  400 non-null    int64  \n",
-            " 4    SOP               400 non-null    float64\n",
-            " 5   LOR                400 non-null    float64\n",
-            " 6   CGPA               400 non-null    float64\n",
-            " 7   Research           400 non-null    int64  \n",
-            " 8   Chance of Admit    400 non-null    float64\n",
-            "dtypes: float64(4), int64(5)\n",
-            "memory usage: 28.2 KB\n"
-          ]
-        }
-      ]
-    },
-    {
-      "cell_type": "code",
-      "source": [
-        "admission.describe()"
-      ],
-      "metadata": {
-        "colab": {
-          "base_uri": "https://localhost:8080/",
-          "height": 300
-        },
-        "outputId": "578b8eeb-e78d-41cb-f922-65d86594469f",
-        "id": "iKRMtF8A6yqB"
-      },
-      "execution_count": 5,
-      "outputs": [
-        {
-          "output_type": "execute_result",
-          "data": {
-            "text/plain": [
-              "        Serial No   GRE Score  TOEFL Score  University Rating         SOP  \\\n",
-              "count  400.000000  400.000000   400.000000         400.000000  400.000000   \n",
-              "mean   200.500000  316.807500   107.410000           3.087500    3.400000   \n",
-              "std    115.614301   11.473646     6.069514           1.143728    1.006869   \n",
-              "min      1.000000  290.000000    92.000000           1.000000    1.000000   \n",
-              "25%    100.750000  308.000000   103.000000           2.000000    2.500000   \n",
-              "50%    200.500000  317.000000   107.000000           3.000000    3.500000   \n",
-              "75%    300.250000  325.000000   112.000000           4.000000    4.000000   \n",
-              "max    400.000000  340.000000   120.000000           5.000000    5.000000   \n",
-              "\n",
-              "             LOR         CGPA    Research  Chance of Admit   \n",
-              "count  400.000000  400.000000  400.000000        400.000000  \n",
-              "mean     3.452500    8.598925    0.547500          0.724350  \n",
-              "std      0.898478    0.596317    0.498362          0.142609  \n",
-              "min      1.000000    6.800000    0.000000          0.340000  \n",
-              "25%      3.000000    8.170000    0.000000          0.640000  \n",
-              "50%      3.500000    8.610000    1.000000          0.730000  \n",
-              "75%      4.000000    9.062500    1.000000          0.830000  \n",
-              "max      5.000000    9.920000    1.000000          0.970000  "
-            ],
-            "text/html": [
-              "\n",
-              "  <div id=\"df-b5ca7d4a-db84-4f0f-a3d0-d9e6cb88a275\">\n",
-              "    <div class=\"colab-df-container\">\n",
-              "      <div>\n",
-              "<style scoped>\n",
-              "    .dataframe tbody tr th:only-of-type {\n",
-              "        vertical-align: middle;\n",
-              "    }\n",
-              "\n",
-              "    .dataframe tbody tr th {\n",
-              "        vertical-align: top;\n",
-              "    }\n",
-              "\n",
-              "    .dataframe thead th {\n",
-              "        text-align: right;\n",
-              "    }\n",
-              "</style>\n",
-              "<table border=\"1\" class=\"dataframe\">\n",
-              "  <thead>\n",
-              "    <tr style=\"text-align: right;\">\n",
-              "      <th></th>\n",
-              "      <th>Serial No</th>\n",
-              "      <th>GRE Score</th>\n",
-              "      <th>TOEFL Score</th>\n",
-              "      <th>University Rating</th>\n",
-              "      <th>SOP</th>\n",
-              "      <th>LOR</th>\n",
-              "      <th>CGPA</th>\n",
-              "      <th>Research</th>\n",
-              "      <th>Chance of Admit</th>\n",
-              "    </tr>\n",
-              "  </thead>\n",
-              "  <tbody>\n",
-              "    <tr>\n",
-              "      <th>count</th>\n",
-              "      <td>400.000000</td>\n",
-              "      <td>400.000000</td>\n",
-              "      <td>400.000000</td>\n",
-              "      <td>400.000000</td>\n",
-              "      <td>400.000000</td>\n",
-              "      <td>400.000000</td>\n",
-              "      <td>400.000000</td>\n",
-              "      <td>400.000000</td>\n",
-              "      <td>400.000000</td>\n",
-              "    </tr>\n",
-              "    <tr>\n",
-              "      <th>mean</th>\n",
-              "      <td>200.500000</td>\n",
-              "      <td>316.807500</td>\n",
-              "      <td>107.410000</td>\n",
-              "      <td>3.087500</td>\n",
-              "      <td>3.400000</td>\n",
-              "      <td>3.452500</td>\n",
-              "      <td>8.598925</td>\n",
-              "      <td>0.547500</td>\n",
-              "      <td>0.724350</td>\n",
-              "    </tr>\n",
-              "    <tr>\n",
-              "      <th>std</th>\n",
-              "      <td>115.614301</td>\n",
-              "      <td>11.473646</td>\n",
-              "      <td>6.069514</td>\n",
-              "      <td>1.143728</td>\n",
-              "      <td>1.006869</td>\n",
-              "      <td>0.898478</td>\n",
-              "      <td>0.596317</td>\n",
-              "      <td>0.498362</td>\n",
-              "      <td>0.142609</td>\n",
-              "    </tr>\n",
-              "    <tr>\n",
-              "      <th>min</th>\n",
-              "      <td>1.000000</td>\n",
-              "      <td>290.000000</td>\n",
-              "      <td>92.000000</td>\n",
-              "      <td>1.000000</td>\n",
-              "      <td>1.000000</td>\n",
-              "      <td>1.000000</td>\n",
-              "      <td>6.800000</td>\n",
-              "      <td>0.000000</td>\n",
-              "      <td>0.340000</td>\n",
-              "    </tr>\n",
-              "    <tr>\n",
-              "      <th>25%</th>\n",
-              "      <td>100.750000</td>\n",
-              "      <td>308.000000</td>\n",
-              "      <td>103.000000</td>\n",
-              "      <td>2.000000</td>\n",
-              "      <td>2.500000</td>\n",
-              "      <td>3.000000</td>\n",
-              "      <td>8.170000</td>\n",
-              "      <td>0.000000</td>\n",
-              "      <td>0.640000</td>\n",
-              "    </tr>\n",
-              "    <tr>\n",
-              "      <th>50%</th>\n",
-              "      <td>200.500000</td>\n",
-              "      <td>317.000000</td>\n",
-              "      <td>107.000000</td>\n",
-              "      <td>3.000000</td>\n",
-              "      <td>3.500000</td>\n",
-              "      <td>3.500000</td>\n",
-              "      <td>8.610000</td>\n",
-              "      <td>1.000000</td>\n",
-              "      <td>0.730000</td>\n",
-              "    </tr>\n",
-              "    <tr>\n",
-              "      <th>75%</th>\n",
-              "      <td>300.250000</td>\n",
-              "      <td>325.000000</td>\n",
-              "      <td>112.000000</td>\n",
-              "      <td>4.000000</td>\n",
-              "      <td>4.000000</td>\n",
-              "      <td>4.000000</td>\n",
-              "      <td>9.062500</td>\n",
-              "      <td>1.000000</td>\n",
-              "      <td>0.830000</td>\n",
-              "    </tr>\n",
-              "    <tr>\n",
-              "      <th>max</th>\n",
-              "      <td>400.000000</td>\n",
-              "      <td>340.000000</td>\n",
-              "      <td>120.000000</td>\n",
-           
+
+YBI Foundation
+
+Chance of Admission for Higher Studies
+Predict the chances of admission of a student to a Graduate program based on:
+
+GRE Scores (290 to 340)
+TOEFL Scores (92 to 120)
+University Rating (1 to 5)
+Statement of Purpose (1 to 5)
+Letter of Recommendation Strength (1 to 5)
+Undergraduate CGPA (6.8 to 9.92)
+Research Experience (0 or 1)
+Chance of Admit (0.34 to 0.97)
+Watch Video Tutorial
+
+
+# Step 1 : import library
+import pandas as pd
+     
+
+# Step 2 : import data
+admission = pd.read_csv('https://github.com/ybifoundation/Dataset/raw/main/Admission%20Chance.csv')
+     
+
+admission.head()
+     
+Serial No	GRE Score	TOEFL Score	University Rating	SOP	LOR	CGPA	Research	Chance of Admit
+0	1	337	118	4	4.5	4.5	9.65	1	0.92
+1	2	324	107	4	4.0	4.5	8.87	1	0.76
+2	3	316	104	3	3.0	3.5	8.00	1	0.72
+3	4	322	110	3	3.5	2.5	8.67	1	0.80
+4	5	314	103	2	2.0	3.0	8.21	0	0.65
+
+admission.info()
+     
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 400 entries, 0 to 399
+Data columns (total 9 columns):
+ #   Column             Non-Null Count  Dtype  
+---  ------             --------------  -----  
+ 0   Serial No          400 non-null    int64  
+ 1   GRE Score          400 non-null    int64  
+ 2   TOEFL Score        400 non-null    int64  
+ 3   University Rating  400 non-null    int64  
+ 4    SOP               400 non-null    float64
+ 5   LOR                400 non-null    float64
+ 6   CGPA               400 non-null    float64
+ 7   Research           400 non-null    int64  
+ 8   Chance of Admit    400 non-null    float64
+dtypes: float64(4), int64(5)
+memory usage: 28.2 KB
+
+admission.describe()
+     
+Serial No	GRE Score	TOEFL Score	University Rating	SOP	LOR	CGPA	Research	Chance of Admit
+count	400.000000	400.000000	400.000000	400.000000	400.000000	400.000000	400.000000	400.000000	400.000000
+mean	200.500000	316.807500	107.410000	3.087500	3.400000	3.452500	8.598925	0.547500	0.724350
+std	115.614301	11.473646	6.069514	1.143728	1.006869	0.898478	0.596317	0.498362	0.142609
+min	1.000000	290.000000	92.000000	1.000000	1.000000	1.000000	6.800000	0.000000	0.340000
+25%	100.750000	308.000000	103.000000	2.000000	2.500000	3.000000	8.170000	0.000000	0.640000
+50%	200.500000	317.000000	107.000000	3.000000	3.500000	3.500000	8.610000	1.000000	0.730000
+75%	300.250000	325.000000	112.000000	4.000000	4.000000	4.000000	9.062500	1.000000	0.830000
+max	400.000000	340.000000	120.000000	5.000000	5.000000	5.000000	9.920000	1.000000	0.970000
+
+# Step 3 : define target (y) and features (X)
+     
+
+admission.columns
+     
+Index(['Serial No', 'GRE Score', 'TOEFL Score', 'University Rating', ' SOP',
+       'LOR ', 'CGPA', 'Research', 'Chance of Admit '],
+      dtype='object')
+
+y = admission['Chance of Admit ']
+     
+
+X = admission.drop(['Serial No','Chance of Admit '],axis=1)
+     
+
+# Step 4 : train test split
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X,y, train_size=0.7, random_state=2529)
+     
+
+# check shape of train and test sample
+X_train.shape, X_test.shape, y_train.shape, y_test.shape
+     
+((280, 7), (120, 7), (280,), (120,))
+
+# Step 5 : select model
+from sklearn.linear_model import LinearRegression
+model = LinearRegression()
+     
+
+# Step 6 : train or fit model
+model.fit(X_train,y_train)
+     
+LinearRegression()
+In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook.
+On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.
+
+model.intercept_
+     
+-1.2831244932033998
+
+model.coef_
+     
+array([ 0.00204057,  0.00287273,  0.00566887, -0.00380559,  0.01973175,
+        0.11314449,  0.02061553])
+
+# Step 7 : predict model
+y_pred = model.predict(X_test)
+     
+
+y_pred
+     
+array([0.71426327, 0.72534136, 0.69677103, 0.66566584, 0.57483872,
+       0.93087527, 0.93701113, 0.72361387, 0.81130158, 0.62223963,
+       0.59629648, 0.80084072, 0.52537944, 0.79174558, 0.84064992,
+       0.66429594, 0.65136589, 0.66990687, 0.75794085, 0.86072023,
+       0.66088101, 0.85570763, 0.84777425, 0.95033179, 0.68750762,
+       0.65907671, 0.65279623, 0.5709259 , 0.55895645, 0.57990205,
+       0.54497918, 0.7570717 , 0.69682571, 0.77286067, 0.64320811,
+       0.5183554 , 0.43816818, 0.84654064, 0.90398354, 0.80517781,
+       0.72218971, 0.72882587, 0.68145136, 0.88592237, 0.77208852,
+       0.78778085, 0.95526121, 0.88586486, 0.59980416, 0.50690214,
+       0.59947098, 0.63380406, 0.82841217, 0.44911724, 0.71068577,
+       0.77335748, 0.68851557, 0.64486026, 0.85537724, 0.65517768,
+       0.65046031, 0.90818978, 0.63422429, 0.68658606, 0.72150268,
+       0.69030545, 0.59381287, 0.93813035, 0.58997351, 0.91542587,
+       0.59283415, 0.93351713, 0.59478751, 0.71380389, 0.54346237,
+       0.84710913, 0.6084418 , 0.7257337 , 0.67545704, 0.81387503,
+       0.70259527, 0.88600461, 0.67084016, 0.53064995, 0.77790726,
+       0.65780713, 0.78970635, 0.54709634, 0.77924705, 0.66750436,
+       0.69363338, 0.69891086, 0.92185813, 0.70469056, 0.62554306,
+       0.62208829, 0.73828086, 0.67369114, 0.76391913, 0.61985049,
+       0.92865957, 0.70430038, 0.9828821 , 0.82502993, 0.78261009,
+       0.83438446, 0.66840368, 0.70165011, 0.64534281, 0.5715406 ,
+       0.80739359, 0.69273815, 0.80585447, 0.6102703 , 0.54641206,
+       0.76301749, 0.71080317, 0.6261331 , 0.83951248, 0.68578269])
+
+# Step 8 : model accuracy
+from sklearn.metrics import mean_absolute_error, mean_absolute_percentage_error, mean_squared_error
+     
+
+mean_absolute_error(y_test,y_pred)
+     
+0.04400128934232651
+
+mean_absolute_percentage_error(y_test,y_pred)
+     
+0.07575278864605438
+
+mean_squared_error(y_test,y_pred)
+     
+0.004038263715495693
+Don't Forget to Star and Watch on GitHub to Receive Updates
+Action 1: ⭐Star Repository as it make easy for you to find it again. You can see all the repositories and topics you have starred by going to your stars page.
+
+Action 2: 👁 Watch Repository and get notified of all future updates and activities in this repository.
+
+Click Here to Visit Fundamental Repository on GitHub
+
+image.png
+
+Don't Forget to Upvote NoteBook on Kaggle and Receive Updates
+Click Here to Visit Kaggle
+
+image.png
